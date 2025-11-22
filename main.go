@@ -1,6 +1,10 @@
 package main
 
 import (
+	_ "3-bin/api"
+	_ "3-bin/bins"
+	_ "3-bin/file"
+	_ "3-bin/storage"
 	"fmt"
 	"time"
 )
