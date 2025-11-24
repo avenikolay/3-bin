@@ -3,31 +3,20 @@ package main
 import (
 	_ "3-bin/api"
 	_ "3-bin/bins"
-	_ "3-bin/file"
-	_ "3-bin/storage"
+	"3-bin/storage"
 	"fmt"
-	"time"
 )
 
-type Bin struct {
-	id          string
-	private     bool
-	createdDate time.Time
-	name        string
-}
-
-func makeBin(id string, private bool, name string) (*Bin, error) {
-	createdDate := time.Now()
-	return &Bin{id, private, createdDate, name}, nil
-}
-
 func main() {
-	var BinList []Bin
-	testBin, error := makeBin("1", true, "test")
+	//var BinList []storage.Bin
+	//BinList = append(BinList, *testBin)
 
-	if error != nil {
-		fmt.Println(error)
+	testBin := storage.MakeBin("1", true, "test")
+	storage.SaveBin(testBin)
+
+	loadedBin, err := storage.ReadBin()
+	if err != nil {
+		fmt.Println(err)
 	}
-	BinList = append(BinList, *testBin)
-	fmt.Println(BinList)
+	fmt.Println(loadedBin)
 }
