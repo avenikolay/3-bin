@@ -12,7 +12,12 @@ func main() {
 	//BinList = append(BinList, *testBin)
 
 	testBin := storage.MakeBin("1", true, "test")
-	storage.SaveBin(testBin)
+	err := storage.SaveBin(testBin)
+	if err != nil {
+		fmt.Println("Не удалось записать структуру в файЛ")
+		fmt.Println(err)
+		return
+	}
 
 	loadedBin, err := storage.ReadBin()
 	if err != nil {

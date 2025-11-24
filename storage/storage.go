@@ -18,16 +18,14 @@ func MakeBin(id string, private bool, name string) *Bin {
 	return &Bin{Id: id, Private: private, CreatedDate: createdDate, Name: name}
 }
 
-func SaveBin(bin *Bin) {
+func SaveBin(bin *Bin) error {
 	jsonStruct, err := json.Marshal(bin)
-	if err != nil {
-		return
-	}
-	file.WriteFile(jsonStruct, "bin.json")
+	err = file.WriteFile(jsonStruct, "bin.json")
+	return err
 }
 
 func ReadBin() (*Bin, error) {
-	file, err := file.ReadFile("bin.json")
+	file, err := file.ReadJsonFile("bin.json")
 	if err != nil {
 		return nil, err
 	}
