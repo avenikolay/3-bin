@@ -2,26 +2,30 @@ package main
 
 import (
 	_ "3-bin/api"
-	_ "3-bin/bins"
+	"3-bin/bins"
+	"3-bin/file"
 	"3-bin/storage"
 	"fmt"
 )
 
 func main() {
-	//var BinList []storage.Bin
-	//BinList = append(BinList, *testBin)
-
-	testBin := storage.MakeBin("1", true, "test")
-	err := storage.SaveBin(testBin)
+	fileDb, err := file.NewFileDb("bin.json")
 	if err != nil {
-		fmt.Println("Не удалось записать структуру в файЛ")
 		fmt.Println(err)
 		return
 	}
-
-	loadedBin, err := storage.ReadBin()
+	bin, err := bins.ReadBin(fileDb)
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
-	fmt.Println(loadedBin)
+	binStorage := storage.NewStorage()
+	binStorage.PutBin(bin)
+
+	bin = bins.MakeBin("1", true, "test")
+	binStorage.PutBin(bin)
+
+	binsList := binStorage.GetBins()
+	fmt.Println(binsList)
+
 }

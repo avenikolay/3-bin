@@ -1,35 +1,19 @@
 package storage
 
-import (
-	"3-bin/file"
-	"encoding/json"
-	"time"
-)
+import "3-bin/bins"
 
-type Bin struct {
-	Id          string    `json:"id"`
-	Private     bool      `json:"private"`
-	CreatedDate time.Time `json:"createdDate"`
-	Name        string    `json:"name"`
+type Storage struct {
+	bins []bins.Bin
 }
 
-func MakeBin(id string, private bool, name string) *Bin {
-	createdDate := time.Now()
-	return &Bin{Id: id, Private: private, CreatedDate: createdDate, Name: name}
+func NewStorage() *Storage {
+	return &Storage{}
 }
 
-func SaveBin(bin *Bin) error {
-	jsonStruct, err := json.Marshal(bin)
-	err = file.WriteFile(jsonStruct, "bin.json")
-	return err
+func (storage *Storage) PutBin(bin *bins.Bin) {
+	storage.bins = append(storage.bins, *bin)
 }
 
-func ReadBin() (*Bin, error) {
-	file, err := file.ReadJsonFile("bin.json")
-	if err != nil {
-		return nil, err
-	}
-	var bin Bin
-	err = json.Unmarshal(file, &bin)
-	return &bin, err
+func (storage *Storage) GetBins() *[]bins.Bin {
+	return &storage.bins
 }

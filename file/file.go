@@ -7,27 +7,34 @@ import (
 	"strings"
 )
 
-func ReadJsonFile(name string) ([]byte, error) {
+type File interface {
+	ReadJsonFile() ([]byte, error)
+	WriteJsonFile(content []byte) error
+}
 
-	if strings.HasSuffix(name, ".json") == false {
+type JsonFile struct {
+	name string
+}
+
+func NewFileDb(filename string) (*JsonFile, error) {
+	if strings.HasSuffix(filename, ".json") == false {
 		return nil, errors.New("FILE_IS_NOT_JSON")
 	}
+	return &JsonFile{
+		name: filename,
+	}, nil
+}
 
-	data, err := os.ReadFile(name)
+func (fileDB *JsonFile) ReadJsonFile() ([]byte, error) {
+	data, err := os.ReadFile(fileDB.name)
 	if err != nil {
 		return nil, err
 	}
 	return data, nil
 }
 
-func WriteFile(content []byte, name string) error {
-
-	if strings.HasSuffix(name, ".json") == false {
-		err := errors.New("FILE_IS_NOT_JSON")
-		return err
-	}
-
-	file, err := os.Create(name)
+func (fileDB *JsonFile) WriteJsonFile(content []byte) error {
+	file, err := os.Create(fileDB.name)
 	if err != nil {
 		fmt.Println(err)
 		return err
