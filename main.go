@@ -1,8 +1,10 @@
 package main
 
 import (
+	"3-bin/api"
 	_ "3-bin/api"
 	"3-bin/bins"
+	"3-bin/config"
 	"3-bin/file"
 	"3-bin/storage"
 	"fmt"
@@ -19,6 +21,12 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+	key, err := config.NewConfig()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	binStorage := storage.NewStorage()
 	binStorage.PutBin(bin)
 
@@ -26,6 +34,7 @@ func main() {
 	binStorage.PutBin(bin)
 
 	binsList := binStorage.GetBins()
-	fmt.Println(binsList)
+	fmt.Println(*binsList)
 
+	api.SendRequest(bin, key)
 }
